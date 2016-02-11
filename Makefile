@@ -9,6 +9,7 @@ build:
 	@find src -name '*.java' > build/sourceFiles.txt
 	javac -d build @build/sourceFiles.txt
 	javah -jni -d build -classpath build rosshamish.DataSorterBackup
+	
 
 clean:
 	rm -rf build
