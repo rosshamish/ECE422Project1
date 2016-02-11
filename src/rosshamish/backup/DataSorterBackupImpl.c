@@ -112,7 +112,7 @@ int read_ints(const char* filename, int **arr) {
 }
 
 void write_ints(const char* filename, int len, int ints[]) {
-    // todo write to file
+    // todo write C sorted output to file
     printf("Ints in order:\n");
     for (int i=0; i < len; i++) {
         printf("\t%d: %d\n", i, ints[i]);
