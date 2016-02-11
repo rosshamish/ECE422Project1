@@ -1,9 +1,5 @@
 package ishikawa;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Scanner;
-
 /**
  * Attribution
  *  Author: Takanori Ishikawa
