@@ -12,12 +12,25 @@ JNIEXPORT jint JNICALL Java_rosshamish_backup_DataSorterBackup_sortData_1C(JNIEn
     const char *nativeInputFilename = (*e)->GetStringUTFChars(e, inputFilename, 0);
     const char *nativeOutputFilename = (*e)->GetStringUTFChars(e, outputFilename, 0);
     int *arr;
-    int len = read_ints(nativeInputFilename, &arr);
-    int memoryAccesses = insertion_sort(arr, len, 0);
-    write_ints(nativeOutputFilename, len, arr);
+    int returnCode;
+    int len;
+    int memoryAccesses;
+    double HAZARD;
+    double randDouble;
 
-    free(arr);
-    return -1; // todo change to return success or fail based on hazard and rand
+    len = read_ints(nativeInputFilename, &arr);
+
+    memoryAccesses = insertion_sort(arr, len, 0);
+    HAZARD = memoryAccesses * failureProb;
+    randDouble = (double)rand() / (double)RAND_MAX;
+    if (randDouble > 0.5 && randDouble < (0.5+HAZARD)) {
+        free(arr);
+        returnCode = -1;
+    } else {
+        write_ints(nativeOutputFilename, len, arr);
+        returnCode = 0;
+    }
+    return returnCode;
 }
 
 /*
