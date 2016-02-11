@@ -4,7 +4,7 @@ import java.nio.file.Path;
 import java.util.List;
 
 public abstract class DataSorter {
-    private final Double HAZARD;
+    protected final Double HAZARD;
 
     public DataSorter(Double HAZARD) {
         if (HAZARD < 0 || HAZARD > 0.5) {
