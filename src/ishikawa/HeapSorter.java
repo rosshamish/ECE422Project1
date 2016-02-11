@@ -34,10 +34,10 @@ public class HeapSorter {
         Double HAZARD = this.getNumMemoryAccesses() * failureProb;
         Random rand = new Random(System.currentTimeMillis());
         Double randDouble = rand.nextDouble();
-        if (randDouble > 0.5 && randDouble < HAZARD) {
-            return SUCCESS;
-        } else {
+        if (randDouble > 0.5 && randDouble < (0.5+HAZARD)) {
             return FAILURE;
+        } else {
+            return SUCCESS;
         }
     }
 
