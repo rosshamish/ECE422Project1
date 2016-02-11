@@ -7,11 +7,11 @@ void insertion_sort(int *, size_t, size_t);
 int read_ints(const char*, int **);
 void write_ints(const char*, int, int *);
 
-JNIEXPORT void JNICALL Java_rosshamish_DataSorterBackup_sortData_1C(JNIEnv *e, jobject jo,
-        jobject inputFilename, jobject outputFilename, jdouble hazard, jint timeLimit) {
+JNIEXPORT jint JNICALL Java_rosshamish_DataSorterBackup_sortData_1C(JNIEnv *e, jobject jo,
+        jobject inputFilename, jobject outputFilename, jdouble failureProb, jint timeLimit) {
     //const char *nativeString = (*env)->GetStringUTFChars(env, javaString, 0);
-    printf("From C, using HAZARD=%.3f\n", hazard);
-    return;
+    printf("From C, using failureProb=%.3f\n", failureProb);
+    return 0;
 }
 
 /*

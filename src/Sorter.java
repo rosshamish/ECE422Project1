@@ -3,6 +3,8 @@ import rosshamish.DataSorterBackup;
 import rosshamish.DataSorterPrimary;
 import rosshamish.MemoryFailureException;
 
+import java.io.FileNotFoundException;
+
 public class Sorter {
     public static void main(String[] args) {
         System.out.println(Strings.Header);
@@ -38,7 +40,11 @@ public class Sorter {
             } catch (MemoryFailureException e1) {
                 e1.printStackTrace(); // TODO remove
                 // TODO do something?
+            } catch (FileNotFoundException e1) {
+                e1.printStackTrace();
             }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
         }
 
         System.out.println("...done");
