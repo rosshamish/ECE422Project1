@@ -1,7 +1,5 @@
 package ishikawa;
 
-import java.util.Random;
-
 /**
  * Attribution
  *  Author: Takanori Ishikawa
@@ -10,9 +8,6 @@ import java.util.Random;
  *  Accessed: February 10, 2016
  */
 public class HeapSorter {
-    private static final boolean SUCCESS = true;
-    private static final boolean FAILURE = false;
-
     private int numMemoryAccesses = 0;
     public int getNumMemoryAccesses() {
         return numMemoryAccesses;
@@ -24,21 +19,14 @@ public class HeapSorter {
         this.numMemoryAccesses = 0;
     }
 
-    public boolean sort(int[] a, double failureProb) {
+    public int sort(int[] a) {
         this.clearMemoryAccesses();
         for (int i = 1; i < a.length; i++) shiftup(a, i);
         for (int i = a.length - 1; i > 0; i--) {
             swap(a, 0, i);
             shiftdown(a, i - 1);
         }
-        Double HAZARD = this.getNumMemoryAccesses() * failureProb;
-        Random rand = new Random(System.currentTimeMillis());
-        Double randDouble = rand.nextDouble();
-        if (randDouble > 0.5 && randDouble < (0.5+HAZARD)) {
-            return FAILURE;
-        } else {
-            return SUCCESS;
-        }
+        return getNumMemoryAccesses();
     }
 
     private void swap(int[] elements, int i, int j) {

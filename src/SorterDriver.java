@@ -30,7 +30,7 @@ public class SorterDriver {
                 "\toutputFilename=%s\n" +
                 "\tprimaryFailureProb=%.3f\n" +
                 "\tbackupFailureProb=%.3f\n" +
-                "\ttimeLimit=%d", inputFilename, outputFilename, primaryFailureProb, backupFailureProb, timeLimit));
+                "\ttimeLimit=%ds", inputFilename, outputFilename, primaryFailureProb, backupFailureProb, timeLimit));
 
         WatchdogTimer watchdog = null;
         Adjudicator adjudicator = new Adjudicator();
@@ -50,11 +50,19 @@ public class SorterDriver {
             watchdog.cancel();
 
             try {
-                if (adjudicator.passesAcceptanceTest(outputFilename)) {
-                    break;
+                if (sorter.getStatus() == DataSorter.SUCCESS) {
+                    if (adjudicator.passesAcceptanceTest(outputFilename)) {
+                        System.out.println(String.format("Sorter %s passed acceptance test, output written to %s",
+                                sorter.toString(), outputFilename));
+                        break;
+                    } else {
+                        System.err.println(String.format("Sorter %s failed acceptance test: '%s'",
+                                sorter.toString(), adjudicator.getMessage()));
+                    }
                 }
             } catch (IOException e) {
-                System.err.println(String.format("Sorter %s failed acceptance test: '%s'", sorter.toString(), e.getMessage()));
+                System.err.println(String.format("Sorter %s failed acceptance test: '%s'",
+                        sorter.toString(), e.getMessage()));
             }
         }
 

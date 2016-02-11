@@ -7,11 +7,14 @@ import rosshamish.exceptions.MemoryFailureException;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Random;
 
 public class DataSorterPrimary implements DataSorter, Runnable {
     private String inputFilename;
     private String outputFilename;
     private Double failureProb;
+
+    private Boolean status = FAILURE;
 
     public DataSorterPrimary(String inputFilename, String outputFilename, Double failureProb) {
         this.inputFilename = inputFilename;
@@ -26,6 +29,11 @@ public class DataSorterPrimary implements DataSorter, Runnable {
         DataWriter.writeIntegers(outputFilename, integers);
     }
 
+    @Override
+    public Boolean getStatus() {
+        return status;
+    }
+
     private List<Integer> sort(List<Integer> integers, Double failureProb) throws MemoryFailureException {
         int[] ints = new int[integers.size()];
         for (int i=0; i < integers.size(); i++) {
@@ -33,9 +41,16 @@ public class DataSorterPrimary implements DataSorter, Runnable {
         }
 
         HeapSorter heapSorter = new HeapSorter();
-        boolean success = heapSorter.sort(ints, failureProb);
-        if (!success) {
+        int memoryAccesses = heapSorter.sort(ints);
+
+        Double HAZARD = memoryAccesses * failureProb;
+        Random rand = new Random(System.currentTimeMillis());
+        Double randDouble = rand.nextDouble();
+        if (randDouble > 0.5 && randDouble < (0.5+HAZARD)) {
+            status = FAILURE;
             throw new MemoryFailureException("Primary sorter failed");
+        } else {
+            status = SUCCESS;
         }
 
         for (int i=0; i < integers.size(); i++) {
@@ -50,6 +65,7 @@ public class DataSorterPrimary implements DataSorter, Runnable {
             this.sort();
         } catch (MemoryFailureException | IOException | IllegalIntegersFileException e) {
             e.printStackTrace();
+            status = DataSorter.FAILURE;
         }
     }
 }

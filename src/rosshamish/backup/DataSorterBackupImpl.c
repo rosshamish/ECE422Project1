@@ -3,7 +3,7 @@
 #include <stdlib.h>
 #include "rosshamish_backup_DataSorterBackup.h"
 
-void insertion_sort(int *, size_t, size_t);
+int insertion_sort(int *, size_t, size_t);
 int read_ints(const char*, int **);
 void write_ints(const char*, int, int *);
 
@@ -11,11 +11,9 @@ JNIEXPORT jint JNICALL Java_rosshamish_backup_DataSorterBackup_sortData_1C(JNIEn
         jobject inputFilename, jobject outputFilename, jdouble failureProb) {
     const char *nativeInputFilename = (*e)->GetStringUTFChars(e, inputFilename, 0);
     const char *nativeOutputFilename = (*e)->GetStringUTFChars(e, outputFilename, 0);
-    printf("From C, using inputFilename=%s, outputFilename=%s, failureProb=%.3f\n",
-        nativeInputFilename, nativeOutputFilename, failureProb);
     int *arr;
     int len = read_ints(nativeInputFilename, &arr);
-    insertion_sort(arr, len, 0);
+    int memoryAccesses = insertion_sort(arr, len, 0);
     write_ints(nativeOutputFilename, len, arr);
 
     free(arr);
@@ -31,25 +29,30 @@ JNIEXPORT jint JNICALL Java_rosshamish_backup_DataSorterBackup_sortData_1C(JNIEn
  *
  * This insertion sort will be done in place.
  */
-void insertion_sort(int *arr, size_t n, size_t i) {
+int insertion_sort(int *arr, size_t n, size_t i) {
     int el,j;
+    int memoryAccesses = 0;
 
     if(i == n-1){
         // Nothing to do since we're looking at the last element.
     } else {
-        insertion_sort(arr, n, i+1);
+        memoryAccesses += insertion_sort(arr, n, i+1);
         el = arr[i];
+        memoryAccesses += 1;
 
         // All elements to the right of index i are assumed to be sorted.
         // Now we just have to figure out where el fits in the sorted array
-        for(j = i+1; j<n; j++){
+        for(j=i+1; j<n; j++){
+            memoryAccesses += 1;
             if(el > arr[j]){
                 // el is bigger, swap so el moves to the right in the array.
                 arr[j-1] = arr[j];
                 arr[j] = el;
+                memoryAccesses += 3;
             }
         }
     }
+    return memoryAccesses;
 }
 
 /**
@@ -96,7 +99,8 @@ int read_ints(const char* filename, int **arr) {
 }
 
 void write_ints(const char* filename, int len, int ints[]) {
-    printf("TODO write to %s. Ints in order:\n", filename);
+    // todo write to file
+    printf("Ints in order:\n");
     for (int i=0; i < len; i++) {
         printf("\t%d: %d\n", i, ints[i]);
     }
