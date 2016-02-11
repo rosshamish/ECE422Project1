@@ -1,6 +1,9 @@
-package rosshamish;
+package rosshamish.primary;
 
 import ishikawa.HeapSorter;
+import rosshamish.DataSorter;
+import rosshamish.exceptions.IllegalIntegersFileException;
+import rosshamish.exceptions.MemoryFailureException;
 
 import java.io.FileNotFoundException;
 import java.util.List;
@@ -8,7 +11,7 @@ import java.util.List;
 public class DataSorterPrimary implements DataSorter {
 
     @Override
-    public void sort(String inputFilename, String outputFilename, Double failureProb, Integer timeLimit) throws MemoryFailureException, FileNotFoundException {
+    public void sort(String inputFilename, String outputFilename, Double failureProb, Integer timeLimit) throws MemoryFailureException, FileNotFoundException, IllegalIntegersFileException {
         List<Integer> integers = DataReader.read(inputFilename);
         integers = this.sort(integers, failureProb, timeLimit);
         DataWriter.writeIntegers(outputFilename, integers);

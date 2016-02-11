@@ -1,4 +1,5 @@
 import rosshamish.DataGenerator;
+import rosshamish.Strings;
 
 import java.io.FileNotFoundException;
 

@@ -3,7 +3,8 @@ package test.rosshamish;
 import org.junit.After;
 import org.junit.Test;
 import rosshamish.DataGenerator;
-import rosshamish.DataReader;
+import rosshamish.exceptions.IllegalIntegersFileException;
+import rosshamish.primary.DataReader;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -26,7 +27,7 @@ public class DataReaderTest {
     }
 
     @Test
-    public void testRead() throws Exception {
+    public void testRead() throws Exception, IllegalIntegersFileException {
         DataGenerator dg = new DataGenerator();
         dg.generateData(DataGenerator.testPath, 100);
 

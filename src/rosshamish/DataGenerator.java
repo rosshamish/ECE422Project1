@@ -1,5 +1,7 @@
 package rosshamish;
 
+import rosshamish.primary.DataWriter;
+
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
@@ -15,6 +17,6 @@ public class DataGenerator {
         for (int i=0; i < numIntegersToGenerate; i++) {
             integers.add(rand.nextInt());
         }
-        DataWriter.writeIntegers(outputFilename,integers);
+        DataWriter.writeIntegers(outputFilename, integers);
     }
 }

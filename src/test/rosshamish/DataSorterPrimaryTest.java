@@ -3,7 +3,7 @@ package test.rosshamish;
 import org.junit.Test;
 import rosshamish.DataGenerator;
 import rosshamish.DataSorter;
-import rosshamish.DataSorterPrimary;
+import rosshamish.primary.DataSorterPrimary;
 
 import java.util.ArrayList;
 import java.util.List;

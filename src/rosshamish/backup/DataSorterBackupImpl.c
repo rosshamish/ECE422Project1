@@ -1,16 +1,24 @@
 #include <jni.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include "rosshamish_DataSorterBackup.h"
+#include "rosshamish_backup_DataSorterBackup.h"
 
 void insertion_sort(int *, size_t, size_t);
 int read_ints(const char*, int **);
 void write_ints(const char*, int, int *);
 
-JNIEXPORT jint JNICALL Java_rosshamish_DataSorterBackup_sortData_1C(JNIEnv *e, jobject jo,
+JNIEXPORT jint JNICALL Java_rosshamish_backup_DataSorterBackup_sortData_1C(JNIEnv *e, jobject jo,
         jobject inputFilename, jobject outputFilename, jdouble failureProb, jint timeLimit) {
-    //const char *nativeString = (*env)->GetStringUTFChars(env, javaString, 0);
-    printf("From C, using failureProb=%.3f\n", failureProb);
+    const char *nativeInputFilename = (*e)->GetStringUTFChars(e, inputFilename, 0);
+    const char *nativeOutputFilename = (*e)->GetStringUTFChars(e, outputFilename, 0);
+    printf("From C, using inputFilename=%s, outputFilename=%s, failureProb=%.3f\n",
+        nativeInputFilename, nativeOutputFilename, failureProb);
+    int *arr;
+    int len = read_ints(nativeInputFilename, &arr);
+    insertion_sort(arr, len, 0);
+    write_ints(nativeOutputFilename, len, arr);
+
+    free(arr);
     return 0;
 }
 
@@ -65,13 +73,18 @@ void insertion_sort(int *arr, size_t n, size_t i) {
  */
 int read_ints(const char* filename, int **arr) {
     FILE* file = fopen(filename, "r");
+    if (file == NULL) {
+        printf("null file");
+        return -1;
+    }
     int i = 0;
     int len;
 
-    fscanf (file, "%d", &len);
+    fscanf(file, "%d", &len);
     *arr = (int *) malloc(len*sizeof(int));
     while (!feof(file) && i < len) {
-        fscanf (file, "%d", arr[i++]);
+        fscanf (file, "%d", &(*arr)[i]);
+        i += 1;
     }
 
     if (i != len) {
@@ -83,5 +96,9 @@ int read_ints(const char* filename, int **arr) {
 }
 
 void write_ints(const char* filename, int len, int ints[]) {
-    // TODO
+    printf("TODO write to %s. Ints in order:\n", filename);
+    for (int i=0; i < len; i++) {
+        printf("\t%d: %d\n", i, ints[i]);
+    }
+    printf("\n");
 }

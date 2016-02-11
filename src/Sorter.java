@@ -1,14 +1,16 @@
 import rosshamish.DataSorter;
-import rosshamish.DataSorterBackup;
-import rosshamish.DataSorterPrimary;
-import rosshamish.MemoryFailureException;
+import rosshamish.backup.DataSorterBackup;
+import rosshamish.exceptions.IllegalIntegersFileException;
+import rosshamish.exceptions.MemoryFailureException;
+import rosshamish.primary.DataSorterPrimary;
 
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Sorter {
-    public static void main(String[] args) {
-        System.out.println(Strings.Header);
-        System.out.println("Component 2: Data Sorter");
+    public static void main(String[] args) throws FileNotFoundException, IllegalIntegersFileException {
+        System.out.println("\nComponent 2: Data Sorter");
 
         if (args.length != 5) {
             System.err.println("5 arguments required: inputFilename, outputFilename, primaryHazard, backupHazard, timeLimit");
@@ -28,23 +30,20 @@ public class Sorter {
                 "\tbackupHazard=%.3f\n" +
                 "\ttimeLimit=%d", inputFilename, outputFilename, primaryHazard, backupHazard, timeLimit));
 
-        DataSorter sorter = new DataSorterPrimary();
-        try {
-            sorter.sort(inputFilename, outputFilename, primaryHazard, timeLimit);
-        } catch (MemoryFailureException e) {
-            e.printStackTrace(); // TODO remove
-            // TODO do something?
-            sorter = new DataSorterBackup();
+        List<DataSorter> sorters = new ArrayList<>();
+        sorters.add(new DataSorterPrimary());
+        sorters.add(new DataSorterBackup());
+        for (DataSorter sorter: sorters) {
             try {
-                sorter.sort(inputFilename, outputFilename, backupHazard, timeLimit);
-            } catch (MemoryFailureException e1) {
-                e1.printStackTrace(); // TODO remove
-                // TODO do something?
-            } catch (FileNotFoundException e1) {
-                e1.printStackTrace();
+                sorter.sort(inputFilename, outputFilename, primaryHazard, timeLimit);
+            } catch (FileNotFoundException e) {
+                throw e;
+            } catch (MemoryFailureException e) {
+                continue;
+            } catch (IllegalIntegersFileException e) {
+                throw e;
             }
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
+            break;
         }
 
         System.out.println("...done");

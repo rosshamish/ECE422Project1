@@ -1,4 +1,4 @@
-package rosshamish;
+package rosshamish.primary;
 
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;

@@ -1,4 +1,7 @@
-package rosshamish;
+package rosshamish.backup;
+
+import rosshamish.DataSorter;
+import rosshamish.exceptions.MemoryFailureException;
 
 public class DataSorterBackup implements DataSorter {
     private native int sortData_C(String inputFilename, String outputFilename, double failureProb, int timeLimit);
