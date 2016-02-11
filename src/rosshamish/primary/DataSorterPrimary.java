@@ -8,7 +8,7 @@ import rosshamish.exceptions.MemoryFailureException;
 import java.io.FileNotFoundException;
 import java.util.List;
 
-public class DataSorterPrimary implements DataSorter {
+public class DataSorterPrimary implements DataSorter, Runnable {
 
     @Override
     public void sort(String inputFilename, String outputFilename, Double failureProb, Integer timeLimit) throws MemoryFailureException, FileNotFoundException, IllegalIntegersFileException {
@@ -33,5 +33,10 @@ public class DataSorterPrimary implements DataSorter {
             integers.set(i, ints[i]);
         }
         return integers;
+    }
+
+    @Override
+    public void run() {
+
     }
 }

@@ -8,7 +8,7 @@ import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Sorter {
+public class SorterDriver {
     public static void main(String[] args) throws FileNotFoundException, IllegalIntegersFileException {
         System.out.println("\nComponent 2: Data Sorter");
 
