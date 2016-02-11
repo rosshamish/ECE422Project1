@@ -8,7 +8,7 @@ int read_ints(const char*, int **);
 void write_ints(const char*, int, int *);
 
 JNIEXPORT jint JNICALL Java_rosshamish_backup_DataSorterBackup_sortData_1C(JNIEnv *e, jobject jo,
-        jobject inputFilename, jobject outputFilename, jdouble failureProb, jint timeLimit) {
+        jobject inputFilename, jobject outputFilename, jdouble failureProb) {
     const char *nativeInputFilename = (*e)->GetStringUTFChars(e, inputFilename, 0);
     const char *nativeOutputFilename = (*e)->GetStringUTFChars(e, outputFilename, 0);
     printf("From C, using inputFilename=%s, outputFilename=%s, failureProb=%.3f\n",

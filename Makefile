@@ -3,7 +3,7 @@ SHELL := /bin/bash
 
 export CLASSPATH=$CLASSPATH:./vendor/junit-4.12.jar:./vendor/hamcrest-core-1.3.jar
 
-all: build jni generator sorter
+all: clean build jni generator sorter
 
 jni: jni-mac
 
@@ -25,9 +25,10 @@ jni-mac:
 clean:
 	rm -rf build
 	-rm src/rosshamish/backup/*.h
+	-rm *_test.out
 
 generator:
 	@java -cp build Generator generate_test.out 5
 
 sorter:
-	@java -cp build -Djava.library.path=build SorterDriver generate_test.out sorted_test.out 1.0 0.0 100
+	@java -cp build -Djava.library.path=build SorterDriver generate_test.out sorted_test.out 1.0 0.0 1

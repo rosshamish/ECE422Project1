@@ -9,22 +9,31 @@ import java.io.FileNotFoundException;
 import java.util.List;
 
 public class DataSorterPrimary implements DataSorter, Runnable {
+    private String inputFilename;
+    private String outputFilename;
+    private Double failureProb;
+
+    public DataSorterPrimary(String inputFilename, String outputFilename, Double failureProb) {
+        this.inputFilename = inputFilename;
+        this.outputFilename = outputFilename;
+        this.failureProb = failureProb;
+    }
 
     @Override
-    public void sort(String inputFilename, String outputFilename, Double failureProb, Integer timeLimit) throws MemoryFailureException, FileNotFoundException, IllegalIntegersFileException {
+    public void sort() throws MemoryFailureException, FileNotFoundException, IllegalIntegersFileException {
         List<Integer> integers = DataReader.read(inputFilename);
-        integers = this.sort(integers, failureProb, timeLimit);
+        integers = this.sort(integers, failureProb);
         DataWriter.writeIntegers(outputFilename, integers);
     }
 
-    private List<Integer> sort(List<Integer> integers, Double failureProb, Integer timeLimit) throws MemoryFailureException {
+    private List<Integer> sort(List<Integer> integers, Double failureProb) throws MemoryFailureException {
         int[] ints = new int[integers.size()];
         for (int i=0; i < integers.size(); i++) {
             ints[i] = integers.get(i);
         }
 
         HeapSorter heapSorter = new HeapSorter();
-        boolean success = heapSorter.sort(ints, failureProb, timeLimit);
+        boolean success = heapSorter.sort(ints, failureProb);
         if (!success) {
             throw new MemoryFailureException("Primary sorter failed");
         }
@@ -37,6 +46,10 @@ public class DataSorterPrimary implements DataSorter, Runnable {
 
     @Override
     public void run() {
-
+        try {
+            this.sort();
+        } catch (MemoryFailureException | FileNotFoundException | IllegalIntegersFileException e) {
+            e.printStackTrace();
+        }
     }
 }

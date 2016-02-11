@@ -24,7 +24,7 @@ public class HeapSorter {
         this.numMemoryAccesses = 0;
     }
 
-    public boolean sort(int[] a, double failureProb, int timeLimit) {
+    public boolean sort(int[] a, double failureProb) {
         this.clearMemoryAccesses();
         for (int i = 1; i < a.length; i++) shiftup(a, i);
         for (int i = a.length - 1; i > 0; i--) {

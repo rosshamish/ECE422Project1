@@ -1,7 +1,8 @@
+import rosshamish.Adjudicator;
 import rosshamish.DataSorter;
+import rosshamish.WatchdogTimer;
 import rosshamish.backup.DataSorterBackup;
 import rosshamish.exceptions.IllegalIntegersFileException;
-import rosshamish.exceptions.MemoryFailureException;
 import rosshamish.primary.DataSorterPrimary;
 
 import java.io.FileNotFoundException;
@@ -9,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SorterDriver {
-    public static void main(String[] args) throws FileNotFoundException, IllegalIntegersFileException {
+    public static void main(String[] args) throws FileNotFoundException, IllegalIntegersFileException, InterruptedException {
         System.out.println("\nComponent 2: Data Sorter");
 
         if (args.length != 5) {
@@ -30,22 +31,29 @@ public class SorterDriver {
                 "\tbackupHazard=%.3f\n" +
                 "\ttimeLimit=%d", inputFilename, outputFilename, primaryHazard, backupHazard, timeLimit));
 
+        Adjudicator adjudicator = new Adjudicator();
+        Thread sorterThread;
+        Thread watchdogThread = null;
+
         List<DataSorter> sorters = new ArrayList<>();
-        sorters.add(new DataSorterPrimary());
-        sorters.add(new DataSorterBackup());
+        sorters.add(new DataSorterPrimary(inputFilename, outputFilename, primaryHazard));
+        sorters.add(new DataSorterBackup(inputFilename, outputFilename, backupHazard));
         for (DataSorter sorter: sorters) {
-            try {
-                sorter.sort(inputFilename, outputFilename, primaryHazard, timeLimit);
-            } catch (FileNotFoundException e) {
-                throw e;
-            } catch (MemoryFailureException e) {
-                continue;
-            } catch (IllegalIntegersFileException e) {
-                throw e;
+            sorterThread = new Thread(sorter);
+            watchdogThread = new Thread(new WatchdogTimer(sorterThread, timeLimit));
+            sorterThread.start();
+            watchdogThread.start();
+
+            sorterThread.join();
+            watchdogThread.join();
+            if (adjudicator.passesAcceptanceTest(outputFilename)) {
+                break;
             }
-            break;
         }
 
+        if (watchdogThread != null) {
+            watchdogThread.join();
+        }
         System.out.println("...done");
     }
 }
