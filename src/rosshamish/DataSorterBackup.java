@@ -1,22 +1,14 @@
 package rosshamish;
 
-import java.util.List;
-
-public class DataSorterBackup extends DataSorter {
-
-    public DataSorterBackup(Double HAZARD) {
-        super(HAZARD);
-    }
-
-    private native void sortData_C(double HAZARD);
+public class DataSorterBackup implements DataSorter {
+    private native void sortData_C(String inputFilename, String outputFilename, double hazard, int timeLimit);
 
     static {
         System.loadLibrary("DataSorterBackup");
     }
 
     @Override
-    public List<Integer> sort(List<Integer> integers) throws MemoryFailureException {
-        this.sortData_C(this.HAZARD);
-        return null;
+    public void sort(String inputFilename, String outputFilename, Double hazard, Integer timeLimit) throws MemoryFailureException {
+        this.sortData_C(inputFilename, outputFilename, hazard, timeLimit);
     }
 }

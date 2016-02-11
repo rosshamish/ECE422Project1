@@ -1,22 +1,23 @@
 package test.rosshamish;
 
-import org.junit.AfterClass;
+import org.junit.After;
 import org.junit.Test;
-import static org.junit.Assert.*;
-
 import rosshamish.DataGenerator;
 
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.List;
+
+import static org.junit.Assert.*;
 
 public class DataGeneratorTest {
 
-    @AfterClass
-    public static void deleteTestFile() {
+    @After
+    public void deleteTestFile() {
         try {
-            if (Files.exists(DataGenerator.testPath)) {
-                Files.delete(DataGenerator.testPath);
+            if (Files.exists(Paths.get(DataGenerator.testPath))) {
+                Files.delete(Paths.get(DataGenerator.testPath));
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -26,11 +27,11 @@ public class DataGeneratorTest {
     @Test
     public void testGenerateData() throws Exception {
         DataGenerator dg = new DataGenerator();
-        dg.generateData(DataGenerator.testPath);
+        dg.generateData(DataGenerator.testPath, 100);
 
-        assertTrue("file must exist", Files.exists(DataGenerator.testPath));
+        assertTrue("file must exist", Files.exists(Paths.get(DataGenerator.testPath)));
 
-        List<String> lines = Files.readAllLines(DataGenerator.testPath);
+        List<String> lines = Files.readAllLines(Paths.get(DataGenerator.testPath));
         assertEquals("file should be exactly 2 lines long",
                 lines.size(), 2);
 

@@ -10,10 +10,10 @@ extern "C" {
 /*
  * Class:     rosshamish_DataSorterBackup
  * Method:    sortData_C
- * Signature: (D)V
+ * Signature: (Ljava/lang/String;Ljava/lang/String;DI)V
  */
 JNIEXPORT void JNICALL Java_rosshamish_DataSorterBackup_sortData_1C
-  (JNIEnv *, jobject, jdouble);
+  (JNIEnv *, jobject, jstring, jstring, jdouble, jint);
 
 #ifdef __cplusplus
 }
