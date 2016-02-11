@@ -9,13 +9,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class DataReader {
-    public static List<Integer> read(String filename) throws IllegalIntegersFileException {
+    public static List<Integer> read(String filename) throws IllegalIntegersFileException, IOException {
         ArrayList<Integer> integers = new ArrayList<>();
         List<String> lines;
         try {
             lines = Files.readAllLines(Paths.get(filename));
         } catch (IOException e) {
-            throw new IllegalArgumentException("File not found");
+            throw new IOException(String.format("file with name [%s] not found", filename));
         }
 
         if (lines.size() != 2) {

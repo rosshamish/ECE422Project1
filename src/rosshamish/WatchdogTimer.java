@@ -3,9 +3,10 @@ package rosshamish;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class WatchdogTimer implements Runnable {
+public class WatchdogTimer {
     private Thread watched;
     private long timeout_ms;
+    private Timer timer = null;
 
     public WatchdogTimer(Thread watched, long timeout_ms) {
         this.watched = watched;
@@ -17,14 +18,23 @@ public class WatchdogTimer implements Runnable {
         this.timeout_ms = ((long) timeout_s) * 1000;
     }
 
-    @Override
-    public void run() {
-        Timer timer = new Timer("WatchdogTimer");
+    public void cancel() {
+        if (timer != null) {
+            timer.cancel();
+        }
+    }
+
+    public void start() {
+        timer = new Timer("WatchdogTimer");
         timer.schedule(new TimerTask() {
             @Override
             public void run() {
-                watched.stop();
+                if (watched.isAlive()) {
+                    System.out.println(String.format("Watchdog killing thread %s after %dms",
+                            watched.toString(), timeout_ms));
+                    watched.stop();
+                }
             }
-        }, this.timeout_ms);
+        }, timeout_ms);
     }
 }

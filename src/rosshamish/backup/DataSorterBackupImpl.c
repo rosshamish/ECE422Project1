@@ -19,7 +19,7 @@ JNIEXPORT jint JNICALL Java_rosshamish_backup_DataSorterBackup_sortData_1C(JNIEn
     write_ints(nativeOutputFilename, len, arr);
 
     free(arr);
-    return 0;
+    return -1; // todo change to return success or fail based on hazard and rand
 }
 
 /*
@@ -100,5 +100,4 @@ void write_ints(const char* filename, int len, int ints[]) {
     for (int i=0; i < len; i++) {
         printf("\t%d: %d\n", i, ints[i]);
     }
-    printf("\n");
 }

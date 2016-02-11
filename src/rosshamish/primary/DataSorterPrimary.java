@@ -5,7 +5,7 @@ import rosshamish.DataSorter;
 import rosshamish.exceptions.IllegalIntegersFileException;
 import rosshamish.exceptions.MemoryFailureException;
 
-import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.List;
 
 public class DataSorterPrimary implements DataSorter, Runnable {
@@ -20,7 +20,7 @@ public class DataSorterPrimary implements DataSorter, Runnable {
     }
 
     @Override
-    public void sort() throws MemoryFailureException, FileNotFoundException, IllegalIntegersFileException {
+    public void sort() throws MemoryFailureException, IOException, IllegalIntegersFileException {
         List<Integer> integers = DataReader.read(inputFilename);
         integers = this.sort(integers, failureProb);
         DataWriter.writeIntegers(outputFilename, integers);
@@ -48,7 +48,7 @@ public class DataSorterPrimary implements DataSorter, Runnable {
     public void run() {
         try {
             this.sort();
-        } catch (MemoryFailureException | FileNotFoundException | IllegalIntegersFileException e) {
+        } catch (MemoryFailureException | IOException | IllegalIntegersFileException e) {
             e.printStackTrace();
         }
     }
