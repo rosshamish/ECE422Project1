@@ -113,8 +113,20 @@ int read_ints(const char* filename, int **arr) {
 
 void write_ints(const char* filename, int len, int ints[]) {
     // todo write C sorted output to file
-    printf("Ints in order:\n");
-    for (int i=0; i < len; i++) {
-        printf("\t%d: %d\n", i, ints[i]);
+    FILE *fp = fopen(filename, "w");
+
+    if (!fp) {
+        perror("Failed to open file");
+        return;
     }
+
+    fprintf(fp, "%d\n", len);
+    for (int i=0; i < len; i++) {
+        if (i > 0) {
+            fprintf(fp, " ");
+        }
+        fprintf(fp, "%d", ints[i]);
+    }
+
+    fclose(fp);
 }
