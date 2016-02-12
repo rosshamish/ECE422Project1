@@ -1,6 +1,7 @@
 #include <jni.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
 #include "rosshamish_backup_DataSorterBackup.h"
 
 int insertion_sort(int *, size_t, size_t);
@@ -17,6 +18,9 @@ JNIEXPORT jint JNICALL Java_rosshamish_backup_DataSorterBackup_sortData_1C(JNIEn
     int memoryAccesses;
     double HAZARD;
     double randDouble;
+    time_t t;
+
+    srand((unsigned long) time(&t));
 
     len = read_ints(nativeInputFilename, &arr);
 

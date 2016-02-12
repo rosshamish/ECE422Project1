@@ -31,4 +31,4 @@ generator:
 	@java -cp build Generator generate_test.out 5
 
 sorter:
-	@java -cp build -Djava.library.path=build SorterDriver generate_test.out sorted_test.out 1.0 0.0 10
+	@java -cp build -Djava.library.path=build SorterDriver generate_test.out sorted_test.out 1.0 1.0 10
