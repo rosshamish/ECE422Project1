@@ -3,6 +3,7 @@ package rosshamish.primary;
 import rosshamish.exceptions.IllegalIntegersFileException;
 
 import java.io.IOException;
+import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -13,7 +14,7 @@ public class DataReader {
         ArrayList<Integer> integers = new ArrayList<>();
         List<String> lines;
         try {
-            lines = Files.readAllLines(Paths.get(filename));
+            lines = Files.readAllLines(Paths.get(filename), Charset.defaultCharset());
         } catch (IOException e) {
             throw new IOException(String.format("file with name [%s] not found", filename));
         }

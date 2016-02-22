@@ -5,6 +5,7 @@ import org.junit.Test;
 import rosshamish.DataGenerator;
 
 import java.io.IOException;
+import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
@@ -31,7 +32,7 @@ public class DataGeneratorTest {
 
         assertTrue("file must exist", Files.exists(Paths.get(DataGenerator.testPath)));
 
-        List<String> lines = Files.readAllLines(Paths.get(DataGenerator.testPath));
+        List<String> lines = Files.readAllLines(Paths.get(DataGenerator.testPath), Charset.defaultCharset());
         assertEquals("file should be exactly 2 lines long",
                 lines.size(), 2);
 
