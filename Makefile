@@ -5,7 +5,7 @@ export CLASSPATH=$CLASSPATH:./vendor/junit-4.12.jar:./vendor/hamcrest-core-1.3.j
 
 all: clean build jni generator sorter
 
-jni: jni-mac
+mac: clean build jni-mac generator sorter
 
 .PHONY: build
 build:
@@ -13,6 +13,11 @@ build:
 	@find src -name '*.java' > build/sourceFiles.txt
 	javac -d build @build/sourceFiles.txt
 	javah -jni -d src/rosshamish/backup -classpath build rosshamish.backup.DataSorterBackup
+
+jni:
+	gcc -I$JAVA_HOME/include -I$JAVA_HOME/include/linux -shared -fpic -o build/libDataSorterBackup.so \
+		src/rosshamish/backup/DataSorterBackupImpl.c
+    export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:.
 
 jni-mac:
 	#cp /Library/Java/JavaVirtualMachines/jdk1.8.0_60.jdk/Contents/Home/include/darwin/* \
@@ -31,4 +36,4 @@ generator:
 	@java -cp build Generator generate_test.out 5
 
 sorter:
-	@java -cp build -Djava.library.path=build SorterDriver generate_test.out sorted_test.out 1.0 1.0 10
+	@java -cp build -Djava.library.path=build SorterDriver generate_test.out sorted_test.out 0.5 0.2 10
