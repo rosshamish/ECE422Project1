@@ -15,9 +15,9 @@ build:
 	javah -jni -d src/rosshamish/backup -classpath build rosshamish.backup.DataSorterBackup
 
 jni:
-	gcc -I$JAVA_HOME/include -I$JAVA_HOME/include/linux -shared -fpic -o build/libDataSorterBackup.so \
+	gcc -I$(JAVA_HOME)/include -I$(JAVA_HOME)/include/linux -shared -fpic  -std=c99 -o build/libDataSorterBackup.so \
 		src/rosshamish/backup/DataSorterBackupImpl.c
-    export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:.
+	export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:build
 
 jni-mac:
 	#cp /Library/Java/JavaVirtualMachines/jdk1.8.0_60.jdk/Contents/Home/include/darwin/* \
