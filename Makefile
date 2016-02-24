@@ -10,7 +10,7 @@ mac: clean build jni-mac generator sorter
 .PHONY: build
 build:
 	@mkdir -p build
-	@find src -name '*.java' > build/sourceFiles.txt
+	@find src -not -path '*test/*' -name '*.java' > build/sourceFiles.txt
 	javac -d build @build/sourceFiles.txt
 	javah -jni -d src/rosshamish/backup -classpath build rosshamish.backup.DataSorterBackup
 
