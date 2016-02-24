@@ -35,18 +35,37 @@ A variant fails if any one of the following is true:
 
 ### Usage
 
-Currently only works on Mac OS
+Works on Mac OS El Capitan and on the version of Linux in ETLC E5-005.
 
-TODO get compilation and linking working on Linux
+##### On Linux
 
 ```
-make clean
-make build
-make jni-mac
-make generator
-make sorter
+# Build
+make clean      # cleans the build directory
+make build      # builds .java source
+make jni        # (Linux) compiles and links Java/C interop using JNI
+
+# Run with Default Arguments
+make generator  # runs the Data Generator with default args
+make sorter     # runs the Data Sorter with default args
+
+# Build and Run with Default Arguments
+make            # alias for clean+build+jni+generator+sorter
 ```
 
-... or just `make`
+Run the Data Generator with Custom Arguments:
+```
+$ java -cp build Generator <generated-ints-filename> <num-integers-to-generate>
+(e.g. $ java -cp build Generator generated_ints.out 10)
+```
 
+Run the Data Sorter with Custom Arguments:
+```
+$ java -cp build -Djava.library.path=build SorterDriver <generated-ints-filename> <sorted-output-filename> <primary-prob> <backup-prob> <watchdog-timeout>
+(e.g. $ java -cp build -Djava.library.path=build SorterDriver generate_test.out sorted_test.out 0.5 0.2 10)
+```
+
+##### On Mac
+
+Same instructions, except use `make mac` instead of `make`, and `make jni-mac` instead of `make jni`.
 
